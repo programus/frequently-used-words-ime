@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Frequently Used Words</string>
+    <string name="fuw_input_label">Frequently Used Words Input Method</string>
+    <string name="backspace_label">\u232B</string>
+    <string name="return_label">return</string>
+    <string name="settings_label">⚙</string>
+    <string name="hide_label">V</string>
+    <string name="head_label">|&lt;</string>
+    <string name="tail_label">&gt;|</string>
+    <string name="left_label">&lt;</string>
+    <string name="right_label">&gt;</string>
+    <string name="key_label">Key Label (Show on the Key)</string>
+    <string name="password_flag_prompt">Save as Password</string>
+    <string name="key_content_prompt">Key Content (The content jump into text field when click the key)</string>
+    <string name="key_default_label">Long Press to Setup</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>

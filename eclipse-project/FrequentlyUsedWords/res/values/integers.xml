@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="integer" format="integer" name="settings_code">-10</item>
+    <item type="integer" format="integer" name="backspace_code">-5</item>
+    <item type="integer" name="fuw1" format="integer">-51</item>
+    <item type="integer" name="fuw2" format="integer">-52</item>
+    <item type="integer" name="fuw3" format="integer">-53</item>
+    <item type="integer" name="fuw4" format="integer">-54</item>
+    <item type="integer" name="fuw5" format="integer">-55</item>
+    <item type="integer" name="fuw6" format="integer">-56</item>
+    <item type="integer" name="fuw7" format="integer">-57</item>
+    <item type="integer" name="fuw8" format="integer">-58</item>
+    <item type="integer" name="fuw9" format="integer">-59</item>
+    <item type="integer" format="integer" name="return_code">10</item>
+    <item type="integer" format="integer" name="hide_code">-15</item>
+    <item type="integer" format="integer" name="head_code">-80</item>
+    <item type="integer" format="integer" name="tail_code">-89</item>
+    <item type="integer" format="integer" name="left_code">-82</item>
+    <item type="integer" format="integer" name="right_code">-87</item>
+    <integer name="max_key_label_length">6</integer>
+</resources>

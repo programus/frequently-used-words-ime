@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* 
+**
+** Copyright 2008, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License"); 
+** you may not use this file except in compliance with the License. 
+** You may obtain a copy of the License at 
+**
+**     http://www.apache.org/licenses/LICENSE-2.0 
+**
+** Unless required by applicable law or agreed to in writing, software 
+** distributed under the License is distributed on an "AS IS" BASIS, 
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+** See the License for the specific language governing permissions and 
+** limitations under the License.
+*/
+-->
+
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keyWidth="23%p"
+    android:horizontalGap="0px"
+    android:verticalGap="0px"
+    android:keyHeight="10%p"
+    >
+
+    <Row android:keyHeight="7%p">
+        <Key android:codes="@integer/hide_code" android:keyLabel="@string/hide_label"
+                android:keyWidth="15%p" 
+                android:keyEdgeFlags="left" />
+        <Key android:codes="@integer/head_code" android:keyLabel="@string/head_label" android:keyWidth="17.5%p" />
+        <Key android:codes="@integer/left_code" android:keyLabel="@string/left_label" android:keyWidth="17.5%p" />
+        <Key android:codes="@integer/right_code" android:keyLabel="@string/right_label" android:keyWidth="17.5%p" />
+        <Key android:codes="@integer/tail_code" android:keyLabel="@string/tail_label" android:keyWidth="17.5%p" />
+        <Key android:codes="@integer/hide_code" android:keyLabel="@string/hide_label"
+                android:keyWidth="15%p" 
+                android:keyEdgeFlags="left" />
+    </Row>
+    
+    <Row>
+        <Key android:codes="@integer/backspace_code" android:keyIcon="@android:drawable/ic_input_delete" 
+                android:keyEdgeFlags="left" 
+                android:keyWidth="15%p" 
+                android:isRepeatable="true"/>
+        <Key android:codes="@integer/fuw1" android:popupCharacters="@string/key_default_label" android:horizontalGap="0.333%p"/>
+        <Key android:codes="@integer/fuw2" />
+        <Key android:codes="@integer/fuw3" />
+        <Key android:codes="@integer/backspace_code" android:keyIcon="@android:drawable/ic_input_delete" 
+                android:keyEdgeFlags="right"
+                android:keyWidth="15%p" 
+                android:horizontalGap="0.333%p"
+                android:isRepeatable="true"/>
+    </Row>
+    
+    <Row>
+        <Key android:codes="@integer/settings_code" android:keyIcon="@android:drawable/ic_menu_preferences" 
+                android:keyWidth="15%p" 
+                android:keyEdgeFlags="left" />
+        <Key android:codes="@integer/fuw4" android:horizontalGap="0.333%p" />
+        <Key android:codes="@integer/fuw5" />
+        <Key android:codes="@integer/fuw6" />
+        <Key android:codes="@integer/settings_code" android:keyIcon="@android:drawable/ic_menu_preferences" 
+                android:keyWidth="15%p" android:horizontalGap="0.333%p"
+                android:keyEdgeFlags="right" />
+    </Row>
+    
+    <Row android:rowEdgeFlags="bottom">
+        <Key android:codes="@integer/return_code" android:keyLabel="@string/return_label"
+                android:keyWidth="15%p" 
+                android:keyEdgeFlags="left" />
+        <Key android:codes="@integer/fuw7" android:horizontalGap="0.333%p"/>
+        <Key android:codes="@integer/fuw8" />
+        <Key android:codes="@integer/fuw9" />
+        <Key android:codes="@integer/return_code" android:keyLabel="@string/return_label"
+                android:keyWidth="15%p" android:horizontalGap="0.333%p"
+                android:keyEdgeFlags="right" />
+    </Row>
+</Keyboard>
+    
