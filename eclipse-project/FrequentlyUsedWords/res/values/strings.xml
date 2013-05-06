@@ -17,6 +17,5 @@
     <string name="key_default_label">Long Press to Setup</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="key_settings_dialog_title">Key Settings</string>
 </resources>

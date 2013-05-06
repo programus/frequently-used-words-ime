@@ -30,12 +30,12 @@
                 android:keyWidth="15%p" 
                 android:keyEdgeFlags="left" />
         <Key android:codes="@integer/head_code" android:keyLabel="@string/head_label" android:keyWidth="17.5%p" />
-        <Key android:codes="@integer/left_code" android:keyLabel="@string/left_label" android:keyWidth="17.5%p" />
-        <Key android:codes="@integer/right_code" android:keyLabel="@string/right_label" android:keyWidth="17.5%p" />
+        <Key android:codes="@integer/left_code" android:keyLabel="@string/left_label" android:keyWidth="17.5%p" android:isRepeatable="true" />
+        <Key android:codes="@integer/right_code" android:keyLabel="@string/right_label" android:keyWidth="17.5%p" android:isRepeatable="true" />
         <Key android:codes="@integer/tail_code" android:keyLabel="@string/tail_label" android:keyWidth="17.5%p" />
         <Key android:codes="@integer/hide_code" android:keyLabel="@string/hide_label"
                 android:keyWidth="15%p" 
-                android:keyEdgeFlags="left" />
+                android:keyEdgeFlags="right" />
     </Row>
     
     <Row>

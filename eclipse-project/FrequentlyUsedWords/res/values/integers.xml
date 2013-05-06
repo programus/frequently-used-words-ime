@@ -18,4 +18,6 @@
     <item type="integer" format="integer" name="left_code">-82</item>
     <item type="integer" format="integer" name="right_code">-87</item>
     <integer name="max_key_label_length">6</integer>
+    <item name="fuwS" format="integer" type="integer">-50</item>
+    <item name="fuwE" format="integer" type="integer">-60</item>
 </resources>
