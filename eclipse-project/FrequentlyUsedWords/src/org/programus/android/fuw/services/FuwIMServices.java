@@ -1,13 +1,16 @@
 package org.programus.android.fuw.services;
 
 import org.programus.android.fuw.R;
-import org.programus.android.fuw.activities.KeySettingsDialogActivity;
+import org.programus.android.fuw.settings.AppPreferences;
 import org.programus.android.fuw.views.FuwKeyboard;
 import org.programus.android.fuw.views.FuwKeyboardView;
 
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.KeyboardView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 
 /**
@@ -15,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
  *
  */
 public class FuwIMServices extends InputMethodService implements KeyboardView.OnKeyboardActionListener {
+    private static final String TAG = "FuwIMServices";
     private InputMethodManager mIMManager;
     private FuwKeyboard mKeyboard;
     private FuwKeyboardView mInputView;
@@ -27,6 +31,7 @@ public class FuwIMServices extends InputMethodService implements KeyboardView.On
 
     @Override
     public void onInitializeInterface() {
+        AppPreferences.getInstance(this);
         this.mKeyboard = new FuwKeyboard(this, R.xml.num_like);
     }
 
@@ -51,8 +56,33 @@ public class FuwIMServices extends InputMethodService implements KeyboardView.On
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
+        Log.d(TAG, "onKey");
+        if (primaryCode == this.getCode(R.integer.backspace_code)) {
+            this.keyDownUp(KeyEvent.KEYCODE_DEL);
+        } else if (primaryCode == this.getCode(R.integer.return_code)) {
+            this.keyDownUp(KeyEvent.KEYCODE_ENTER);
+        } else if (primaryCode == this.getCode(R.integer.left_code)) {
+            this.keyDownUp(KeyEvent.KEYCODE_DPAD_LEFT);
+        } else if (primaryCode == this.getCode(R.integer.right_code)) {
+            this.keyDownUp(KeyEvent.KEYCODE_DPAD_RIGHT);
+        } else if (primaryCode == this.getCode(R.integer.head_code)) {
+            this.keyDownUp(KeyEvent.KEYCODE_MOVE_HOME);
+        } else if (primaryCode == this.getCode(R.integer.tail_code)) {
+            this.keyDownUp(KeyEvent.KEYCODE_MOVE_END);
+        }
+    }
+    
+    private int getCode(int resid) {
+        return this.getResources().getInteger(resid);
     }
 
+    private void keyDownUp(int keyEventCode) {
+        getCurrentInputConnection().sendKeyEvent(
+                new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
+        getCurrentInputConnection().sendKeyEvent(
+                new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
+    }
+    
     @Override
     public void onPress(int primaryCode) {
         // TODO Auto-generated method stub
@@ -67,8 +97,11 @@ public class FuwIMServices extends InputMethodService implements KeyboardView.On
 
     @Override
     public void onText(CharSequence text) {
-        // TODO Auto-generated method stub
-        
+        Log.d(TAG, "onText:" + text);
+        InputConnection ic = this.getCurrentInputConnection();
+        if (ic != null && text.length() > 0) {
+            ic.commitText(text, text.length());
+        }
     }
 
     @Override

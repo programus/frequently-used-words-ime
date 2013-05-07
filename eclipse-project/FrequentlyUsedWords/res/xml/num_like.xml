@@ -43,9 +43,9 @@
                 android:keyEdgeFlags="left" 
                 android:keyWidth="15%p" 
                 android:isRepeatable="true"/>
-        <Key android:codes="@integer/fuw1" android:popupCharacters="@string/key_default_label" android:horizontalGap="0.333%p"/>
-        <Key android:codes="@integer/fuw2" />
-        <Key android:codes="@integer/fuw3" />
+        <Key android:codes="@integer/fuw1" android:keyLabel="" android:horizontalGap="0.333%p"/>
+        <Key android:codes="@integer/fuw2" android:keyLabel="" />
+        <Key android:codes="@integer/fuw3" android:keyLabel="" />
         <Key android:codes="@integer/backspace_code" android:keyIcon="@android:drawable/ic_input_delete" 
                 android:keyEdgeFlags="right"
                 android:keyWidth="15%p" 
@@ -57,9 +57,9 @@
         <Key android:codes="@integer/settings_code" android:keyIcon="@android:drawable/ic_menu_preferences" 
                 android:keyWidth="15%p" 
                 android:keyEdgeFlags="left" />
-        <Key android:codes="@integer/fuw4" android:horizontalGap="0.333%p" />
-        <Key android:codes="@integer/fuw5" />
-        <Key android:codes="@integer/fuw6" />
+        <Key android:codes="@integer/fuw4" android:keyLabel="" android:horizontalGap="0.333%p" />
+        <Key android:codes="@integer/fuw5" android:keyLabel="" />
+        <Key android:codes="@integer/fuw6" android:keyLabel="" />
         <Key android:codes="@integer/settings_code" android:keyIcon="@android:drawable/ic_menu_preferences" 
                 android:keyWidth="15%p" android:horizontalGap="0.333%p"
                 android:keyEdgeFlags="right" />
@@ -69,9 +69,9 @@
         <Key android:codes="@integer/return_code" android:keyLabel="@string/return_label"
                 android:keyWidth="15%p" 
                 android:keyEdgeFlags="left" />
-        <Key android:codes="@integer/fuw7" android:horizontalGap="0.333%p"/>
-        <Key android:codes="@integer/fuw8" />
-        <Key android:codes="@integer/fuw9" />
+        <Key android:codes="@integer/fuw7" android:keyLabel="" android:horizontalGap="0.333%p"/>
+        <Key android:codes="@integer/fuw8" android:keyLabel="" />
+        <Key android:codes="@integer/fuw9" android:keyLabel="" />
         <Key android:codes="@integer/return_code" android:keyLabel="@string/return_label"
                 android:keyWidth="15%p" android:horizontalGap="0.333%p"
                 android:keyEdgeFlags="right" />

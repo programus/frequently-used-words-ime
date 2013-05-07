@@ -21,8 +21,10 @@ public class FuwKeyboardView extends KeyboardView {
     @Override
     protected boolean onLongPress(Key popupKey) {
         int keyCode = popupKey.codes[0];
-        if (keyCode < R.integer.fuwS && keyCode > R.integer.fuwE || true) {
-            KeySettingsDialogActivity.showDialog(this.getContext(), keyCode);
+        int s = this.getResources().getInteger(R.integer.fuwS);
+        int e = this.getResources().getInteger(R.integer.fuwE);
+        if (keyCode >= s && keyCode <= e) {
+            KeySettingsDialogActivity.showDialog(this.getContext(), keyCode - s);
             return true;
         } else {
             return super.onLongPress(popupKey);

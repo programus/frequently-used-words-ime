@@ -1,7 +1,7 @@
 package org.programus.android.fuw;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 
 public class SettingsActivity extends Activity {
