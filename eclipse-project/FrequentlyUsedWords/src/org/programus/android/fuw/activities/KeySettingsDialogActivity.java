@@ -26,7 +26,16 @@ public class KeySettingsDialogActivity extends Activity {
     @Override
     @Deprecated
     protected Dialog onCreateDialog(int id, Bundle args) {
-        return new KeySettingsDialog(this, id).getDialog();
+        KeySettingsDialog dialog = new KeySettingsDialog(this, id);
+        Runnable finishThis = new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        };
+        dialog.setPositiveCallback(finishThis);
+        dialog.setNegativeCallback(finishThis);
+        return dialog.getDialog();
     }
     
     public static void showDialog(Context context, int id) {
@@ -38,28 +47,12 @@ public class KeySettingsDialogActivity extends Activity {
 
     @Override
     protected void onPause() {
-        // TODO Auto-generated method stub
         super.onPause();
         Log.d(TAG, "pause");
     }
 
     @Override
-    protected void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
-        Log.d(TAG, "resume");
-    }
-
-    @Override
-    protected void onStart() {
-        // TODO Auto-generated method stub
-        super.onStart();
-        Log.d(TAG, "start");
-    }
-
-    @Override
     protected void onStop() {
-        // TODO Auto-generated method stub
         super.onStop();
         Log.d(TAG, "stop");
     }

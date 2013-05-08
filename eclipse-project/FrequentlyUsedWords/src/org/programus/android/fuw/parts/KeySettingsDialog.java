@@ -4,7 +4,6 @@ import org.programus.android.fuw.R;
 import org.programus.android.fuw.settings.AppPreferences;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -14,24 +13,35 @@ import android.os.Build;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ToggleButton;
 
 public class KeySettingsDialog {
     private Context context;
     private int id;
     
     private EditText keyLabelText;
-    private CheckBox passwordFlag;
+    private ToggleButton passwordFlag;
+    private ToggleButton autoReturnFlag;
     private EditText keyContentText;
+    private Runnable positiveCallback;
+    private Runnable negativeCallback;
     
     public KeySettingsDialog(Context context, int id) {
         this.context = context;
         this.id = id;
     }
     
+    public void setPositiveCallback(Runnable positiveCallback) {
+        this.positiveCallback = positiveCallback;
+    }
+
+    public void setNegativeCallback(Runnable negativeCallback) {
+        this.negativeCallback = negativeCallback;
+    }
+
     @SuppressLint("NewApi")
     public Dialog getDialog() {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -57,19 +67,25 @@ public class KeySettingsDialog {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     saveKeySettings();
-                    finishDialog();
+                    if (positiveCallback != null) {
+                        positiveCallback.run();
+                    }
                 }
             })
             .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    finishDialog();
+                    if (negativeCallback != null) {
+                        negativeCallback.run();
+                    }
                 }
             })
             .setOnCancelListener(new OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
-                    finishDialog();
+                    if (negativeCallback != null) {
+                        negativeCallback.run();
+                    }
                 }
             })
             .create();
@@ -79,6 +95,7 @@ public class KeySettingsDialog {
         AppPreferences.KeySettings ks = new AppPreferences.KeySettings();
         ks.setContent(this.keyContentText.getText().toString());
         ks.setPassword(this.passwordFlag.isChecked());
+        ks.setAutoReturn(this.autoReturnFlag.isChecked());
         ks.setLabel(this.keyLabelText.getText().toString());
         AppPreferences ap = AppPreferences.getInstance(context);
         ap.setKeySettings(id, ks);
@@ -89,13 +106,15 @@ public class KeySettingsDialog {
         AppPreferences.KeySettings ks = ap.getKeySettings(id);
         this.keyLabelText.setText(ks.getLabel());
         this.passwordFlag.setChecked(ks.isPassword());
+        this.autoReturnFlag.setChecked(ks.isAutoReturn());
         this.keyContentText.setText(ks.getContent());
     }
     
     private void bindViewEvents(View view) {
         this.keyLabelText = (EditText) view.findViewById(R.id.keyLabelText);
         this.keyContentText = (EditText) view.findViewById(R.id.keyContentEdit);
-        this.passwordFlag = (CheckBox) view.findViewById(R.id.passwordFlag);
+        this.passwordFlag = (ToggleButton) view.findViewById(R.id.passwordFlag);
+        this.autoReturnFlag = (ToggleButton) view.findViewById(R.id.autoReturnFlag);
         
         this.passwordFlag.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
@@ -110,11 +129,5 @@ public class KeySettingsDialog {
                 }
             }
         });
-    }
-    
-    private void finishDialog() {
-        if (this.context instanceof Activity) {
-            ((Activity) context).finish();
-        }
     }
 }

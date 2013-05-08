@@ -13,7 +13,12 @@ import android.inputmethodservice.Keyboard;
 import android.os.Build;
 
 public class FuwKeyboard extends Keyboard {
-    private static final MessageFormat defaultLabelFormat = new MessageFormat("[[{0}]]");
+//    private static final String TAG = "FuwKeyboard";
+    private static final MessageFormat defaultLabelFormat = new MessageFormat("({0})");
+    
+    public static final char CMD_AUTO_RETURN = 0x01;
+    public static final char CMD_PASSWORD = 0x02;
+    public static final char NONE_CHAR = ' ';
     public static final String BLANK_LABEL = "";
 
     public FuwKeyboard(Context context, int layoutTemplateResId, CharSequence characters, int columns, int horizontalPadding) {
@@ -40,20 +45,33 @@ public class FuwKeyboard extends Keyboard {
         int e = res.getInteger(R.integer.fuwE);
         int c = key.codes[0];
         if (c <= e && c >= s) {
-            int id = key.codes[0] - s;
-            AppPreferences ap = AppPreferences.getInstance(null);
-            AppPreferences.KeySettings ks = ap.getKeySettings(id);
-            String label = ks.getLabel();
-            String content = ks.getContent();
-            if (content.length() == 0) {
-                label = BLANK_LABEL;
-            } else if (label.length() == 0) {
-                label = defaultLabelFormat.format(id);
-            }
-            key.label = label;
-            key.text = content;
+            int id = c - s;
+            this.refreshContentKey(key, id);
         }
         return key;
+    }
+    
+    public void refreshContentKey(Key key, int id) {
+        AppPreferences ap = AppPreferences.getInstance(null);
+        AppPreferences.KeySettings ks = ap.getKeySettings(id);
+        String label = ks.getLabel();
+        String content = ks.getContent();
+        if (content.length() == 0) {
+            label = BLANK_LABEL;
+        } else if (label.length() == 0) {
+            label = defaultLabelFormat.format(new Object[] {id});
+        }
+        key.label = label;
+        StringBuilder sb = new StringBuilder(content);
+        char cmd = NONE_CHAR;
+        if (ks.isPassword()) {
+            cmd |= CMD_PASSWORD;
+        }
+        if (ks.isAutoReturn()) {
+            cmd |= CMD_AUTO_RETURN;
+        }
+        sb.insert(0, cmd);
+        key.text = sb;
     }
 
 }

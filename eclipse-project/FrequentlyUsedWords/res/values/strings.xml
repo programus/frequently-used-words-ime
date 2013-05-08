@@ -12,10 +12,15 @@
     <string name="left_label">&lt;</string>
     <string name="right_label">&gt;</string>
     <string name="key_label">Key Label (Show on the Key)</string>
-    <string name="password_flag_prompt">Save as Password</string>
-    <string name="key_content_prompt">Key Content (The content jump into text field when click the key)</string>
+    <string name="password_flag_on">Save as password</string>
+    <string name="password_flag_off">Save as normal text</string><string name="key_content_prompt">Key Content (The content jump into text field when click the key)</string>
     <string name="key_default_label">Long Press to Setup</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="action_settings">Settings</string>
     <string name="key_settings_dialog_title">Key Settings</string>
+    
+    <string name="auto_return_on">Auto return</string>
+    <string name="auto_return_off">Just text</string>
+    <string name="password_only">Password could only input into password fields.</string>
+    <string name="switch_ime_failed">Failed to show IME picker.</string>
 </resources>

@@ -1,17 +1,26 @@
 package org.programus.android.fuw.services;
 
+import java.util.List;
+
 import org.programus.android.fuw.R;
 import org.programus.android.fuw.settings.AppPreferences;
 import org.programus.android.fuw.views.FuwKeyboard;
 import org.programus.android.fuw.views.FuwKeyboardView;
 
+import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.inputmethodservice.InputMethodService;
+import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
+import android.os.Build;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 /**
  * @author programus
@@ -22,6 +31,7 @@ public class FuwIMServices extends InputMethodService implements KeyboardView.On
     private InputMethodManager mIMManager;
     private FuwKeyboard mKeyboard;
     private FuwKeyboardView mInputView;
+    private boolean mPasswordInputing;
 
     @Override
     public void onCreate() {
@@ -44,6 +54,39 @@ public class FuwIMServices extends InputMethodService implements KeyboardView.On
     }
 
     @Override
+    public void onStartInput(EditorInfo attribute, boolean restarting) {
+        super.onStartInput(attribute, restarting);
+        Log.d(TAG, "InputType: " + attribute.inputType);
+        this.mPasswordInputing = (attribute.inputType & InputType.TYPE_MASK_VARIATION) == InputType.TYPE_TEXT_VARIATION_PASSWORD;
+        this.updateKeyboard();
+    }
+    
+    @Override
+    public void onStartInputView(EditorInfo info, boolean restarting) {
+        super.onStartInputView(info, restarting);
+        this.mInputView.setKeyboard(mKeyboard);
+    }
+
+    private void updateKeyboard() {
+        AppPreferences ap = AppPreferences.getInstance(this);
+        int updatedFlag = ap.getUpdatedFlag();
+        ap.resetUpdateFlag();
+        int s = this.getResources().getInteger(R.integer.fuwS);
+        int e = this.getResources().getInteger(R.integer.fuwE);
+        List<Key> keys = this.mKeyboard.getKeys();
+        for (Key key : keys) {
+            int c = key.codes[0];
+            if (c <= e && c >= s) {
+                int id = c - s;
+                if ((updatedFlag & (1 << id)) != 0) {
+                    Log.d(TAG, "refresh key:" + id);
+                    this.mKeyboard.refreshContentKey(key, id);
+                }
+            }
+        }
+    }
+
+    @Override
     public void onFinishInput() {
         super.onFinishInput();
         
@@ -54,6 +97,7 @@ public class FuwIMServices extends InputMethodService implements KeyboardView.On
         }
     }
 
+    @SuppressLint("InlinedApi")
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
         Log.d(TAG, "onKey");
@@ -66,9 +110,23 @@ public class FuwIMServices extends InputMethodService implements KeyboardView.On
         } else if (primaryCode == this.getCode(R.integer.right_code)) {
             this.keyDownUp(KeyEvent.KEYCODE_DPAD_RIGHT);
         } else if (primaryCode == this.getCode(R.integer.head_code)) {
-            this.keyDownUp(KeyEvent.KEYCODE_MOVE_HOME);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                this.keyDownUp(KeyEvent.KEYCODE_MOVE_HOME);
+            } else {
+                CharSequence s = this.getCurrentInputConnection().getTextBeforeCursor(Integer.MAX_VALUE, 0);
+                for (int i = 0; i < s.length(); i++) {
+                    this.keyDownUp(KeyEvent.KEYCODE_DPAD_LEFT);
+                }
+            }
         } else if (primaryCode == this.getCode(R.integer.tail_code)) {
-            this.keyDownUp(KeyEvent.KEYCODE_MOVE_END);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                this.keyDownUp(KeyEvent.KEYCODE_MOVE_END);
+            } else {
+                CharSequence s = this.getCurrentInputConnection().getTextAfterCursor(Integer.MAX_VALUE, 0);
+                for (int i = 0; i < s.length(); i++) {
+                    this.keyDownUp(KeyEvent.KEYCODE_DPAD_RIGHT);
+                }
+            }
         }
     }
     
@@ -83,16 +141,33 @@ public class FuwIMServices extends InputMethodService implements KeyboardView.On
                 new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
     }
     
+    private void handleClose() {
+        this.requestHideSelf(0);
+        this.mInputView.closing();
+    }
+    
+    private void switchIme() {
+        if (this.mIMManager != null) {
+            this.mIMManager.showInputMethodPicker();
+        }
+    }
+    
     @Override
     public void onPress(int primaryCode) {
-        // TODO Auto-generated method stub
-        
+        Log.d(TAG, "Key Pressed:" + primaryCode);
+        Resources res = this.getResources();
+        int s = res.getInteger(R.integer.fuwS);
+        int e = res.getInteger(R.integer.fuwE);
+        int c = primaryCode;
+        if (!(c <= e && c >= s)) {
+            Log.d(TAG, "preview disabled");
+            this.mInputView.setPreviewEnabled(false);
+        }
     }
 
     @Override
     public void onRelease(int primaryCode) {
-        // TODO Auto-generated method stub
-        
+        this.mInputView.setPreviewEnabled(true);
     }
 
     @Override
@@ -100,31 +175,40 @@ public class FuwIMServices extends InputMethodService implements KeyboardView.On
         Log.d(TAG, "onText:" + text);
         InputConnection ic = this.getCurrentInputConnection();
         if (ic != null && text.length() > 0) {
-            ic.commitText(text, text.length());
+            char cmd = text.charAt(0);
+            if (text.length() > 1) {
+                if (!this.mPasswordInputing && (cmd & FuwKeyboard.CMD_PASSWORD) != 0) {
+                    Toast.makeText(getApplicationContext(), R.string.password_only, Toast.LENGTH_LONG).show();
+                } else {
+                    ic.beginBatchEdit();
+                    ic.commitText(text.subSequence(1, text.length()), text.length() - 1);
+                    if ((cmd & FuwKeyboard.CMD_AUTO_RETURN) != 0) {
+                        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                        ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
+                    }
+                    ic.endBatchEdit();
+                }
+            }
         }
     }
 
     @Override
     public void swipeDown() {
-        // TODO Auto-generated method stub
-        
+        this.handleClose();
     }
 
     @Override
     public void swipeLeft() {
-        // TODO Auto-generated method stub
         
     }
 
     @Override
     public void swipeRight() {
-        // TODO Auto-generated method stub
         
     }
 
     @Override
     public void swipeUp() {
-        // TODO Auto-generated method stub
-        
+        this.switchIme();
     }
 }

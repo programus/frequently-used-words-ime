@@ -21,11 +21,27 @@
         <requestFocus />
     </EditText>
 
-    <CheckBox
-        android:id="@+id/passwordFlag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/password_flag_prompt" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ToggleButton
+            android:id="@+id/passwordFlag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOff="@string/password_flag_off"
+            android:textOn="@string/password_flag_on" />
+
+        <ToggleButton
+            android:id="@+id/autoReturnFlag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textOff="@string/auto_return_off"
+            android:textOn="@string/auto_return_on" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/keyContentPrompt"
@@ -38,6 +54,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPassword" />
+        android:inputType="text|textMultiLine" />
 
 </LinearLayout>

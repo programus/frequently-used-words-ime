@@ -24,11 +24,14 @@ public class FuwKeyboardView extends KeyboardView {
         int s = this.getResources().getInteger(R.integer.fuwS);
         int e = this.getResources().getInteger(R.integer.fuwE);
         if (keyCode >= s && keyCode <= e) {
-            KeySettingsDialogActivity.showDialog(this.getContext(), keyCode - s);
+            final int id = keyCode - s;
+            KeySettingsDialogActivity.showDialog(this.getContext(), id);
+            return true;
+        } else if (keyCode == this.getResources().getInteger(R.integer.settings_code)) {
+            this.getOnKeyboardActionListener().swipeUp();
             return true;
         } else {
             return super.onLongPress(popupKey);
         }
     }
-
 }
