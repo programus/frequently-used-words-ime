@@ -127,6 +127,8 @@ public class FuwIMServices extends InputMethodService implements KeyboardView.On
                     this.keyDownUp(KeyEvent.KEYCODE_DPAD_RIGHT);
                 }
             }
+        } else if (primaryCode == this.getCode(R.integer.hide_code)) {
+            this.handleClose();
         }
     }
     
